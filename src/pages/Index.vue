@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onActivated, computed } from 'vue'
 import { getGamesByDate } from '../api/nba'
 import { getToday, getOffsetDate } from '../utils/date'
 import { getStorage } from '../utils/storage'
@@ -102,9 +102,7 @@ const fetchGames = async (forceRefresh = false) => {
   }
 }
 
-onMounted(() => {
-  fetchGames()
-  
+const loadLinks = () => {
   // 推荐内置（安全、稳定、官方）
   const officialLinks = [ 
     { 
@@ -126,6 +124,16 @@ onMounted(() => {
   ]
   
   links.value = getStorage('nba_links', officialLinks)
+}
+
+onMounted(() => {
+  fetchGames()
+  loadLinks()
+})
+
+// 因为首页使用了 keep-alive 缓存，每次从管理页返回时，需要重新读取本地链接
+onActivated(() => {
+  loadLinks()
 })
 </script>
 
