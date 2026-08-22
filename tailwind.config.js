@@ -6,12 +6,33 @@ export default {
   ],
   theme: {
     extend: {
+      // 全部指回 style.css 里的 CSS 变量，避免同一个颜色在两处各写一遍
       colors: {
-        'nba-red': '#E03A3E',
-        'nba-blue': '#17408B',
-        'dark-bg': '#121212',
-        'card-bg': 'rgba(30, 30, 30, 0.8)',
-      }
+        bg: 'var(--bg)',
+        elev: 'var(--bg-elev)',
+        'elev-2': 'var(--bg-elev-2)',
+        line: 'var(--line)',
+        'line-strong': 'var(--line-strong)',
+        ink: 'var(--ink)',
+        'ink-2': 'var(--ink-2)',
+        'ink-3': 'var(--ink-3)',
+        accent: 'var(--accent)',
+        'accent-cool': 'var(--accent-cool)',
+        gold: 'var(--gold)',
+        live: 'var(--live)',
+      },
+      borderColor: {
+        DEFAULT: 'var(--line)',
+      },
+      borderRadius: {
+        sm: 'var(--r-sm)',
+        md: 'var(--r-md)',
+        lg: 'var(--r-lg)',
+      },
+      fontFamily: {
+        body: 'var(--font-body)',
+        display: 'var(--font-display)',
+      },
     },
   },
   plugins: [],

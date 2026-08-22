@@ -7,11 +7,14 @@ export const getStorage = (key, defaultValue = null) => {
   }
 }
 
+// 返回是否写入成功，调用方（如缓存层）需要据此在配额满时腾空间
 export const setStorage = (key, value) => {
   try {
     localStorage.setItem(key, JSON.stringify(value))
+    return true
   } catch (e) {
-    console.error('Set storage error:', e)
+    console.warn('Set storage failed:', key, e.message)
+    return false
   }
 }
 

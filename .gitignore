@@ -1,0 +1,28 @@
+node_modules/
+dist/
+dev-dist/
+.DS_Store
+*.local
+.env
+.env.*
+!.env.example
+.vercel
+npm-debug.log*
+yarn-error.log*
+# Local agent/tool configuration
+.agents/
+.claude/
+.neon
+skills-lock.json
+
+# Xcode user and build state
+**/xcuserdata/
+*.xcuserstate
+DerivedData/
+*.ipa
+
+# Unselected generated icon concepts
+NBAASS-iOS/IconCandidates/
+
+# Keep the documented variable template in Git.
+!.env.example

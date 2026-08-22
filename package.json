@@ -5,10 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "vercel dev",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:api": "node --check api/v1/games.js && node --check api/v1/standings.js && node --check api/v1/playoffs.js && node --check api/v1/players.js && node --check api/v1/player.js && node --check api/v1/player-stats.js && node --check api/cron/sync.js"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "@upstash/redis": "^1.35.3",
     "axios": "^1.6.0",
     "echarts": "^5.5.0",
     "vue": "^3.4.0",

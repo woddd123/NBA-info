@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/espn-api/:path*",
+      "destination": "https://site.api.espn.com/:path*"
+    },
+    {
+      "source": "/((?!api|espn-api|assets|icons|.*\\.).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
