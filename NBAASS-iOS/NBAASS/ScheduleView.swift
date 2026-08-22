@@ -24,7 +24,11 @@ final class ScheduleViewModel: ObservableObject {
 
 struct ScheduleView: View {
     @EnvironmentObject private var storage: StorageService
+    @Environment(\.openURL) private var openURL
     @StateObject private var model = ScheduleViewModel()
+    @State private var selectedWatchLink: WatchLink?
+    @State private var playerLink: WatchLink?
+    @State private var showingWatchOptions = false
 
     private var days: [Date] { (-3...3).compactMap { Calendar.current.date(byAdding: .day, value: $0, to: model.date) } }
 
@@ -49,6 +53,26 @@ struct ScheduleView: View {
             }
             .background(Color.clear)
             .task { await model.load() }
+            .confirmationDialog(
+                selectedWatchLink?.name ?? "选择观赛方式",
+                isPresented: $showingWatchOptions,
+                titleVisibility: .visible
+            ) {
+                Button("在线观看") {
+                    playerLink = selectedWatchLink
+                }
+                Button("进入链接") {
+                    guard let rawURL = selectedWatchLink?.url,
+                          let url = URL(string: rawURL) else { return }
+                    openURL(url)
+                }
+                Button("取消", role: .cancel) {}
+            } message: {
+                Text("在线观看会自动查找网页公开的视频源；受保护的视频可能无法播放。")
+            }
+            .fullScreenCover(item: $playerLink) { link in
+                OnlinePlayerView(link: link)
+            }
         }
     }
 
@@ -83,13 +107,17 @@ struct ScheduleView: View {
                 LazyVGrid(columns: [.init(.flexible()), .init(.flexible())], spacing: 12) {
                     ForEach(Array(storage.links.enumerated()), id: \.element.id) { index, link in
                         if let url = URL(string: link.url) {
-                            Link(destination: url) {
+                            Button {
+                                selectedWatchLink = link
+                                showingWatchOptions = true
+                            } label: {
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text(String(format: "%02d", index + 1)).font(.caption.bold().monospacedDigit()).foregroundStyle(Theme.ink3)
                                     Text(link.name).font(.system(size: 15, weight: .semibold)).lineLimit(1).foregroundStyle(Theme.ink)
                                     Text(url.host() ?? link.url).font(.system(size: 11)).lineLimit(1).foregroundStyle(Theme.ink3)
                                 }.frame(maxWidth: .infinity, alignment: .leading).padding(14).appCard()
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
